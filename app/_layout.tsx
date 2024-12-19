@@ -1,3 +1,4 @@
+// /app/_layout.jsx
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
@@ -14,8 +15,8 @@ export {
 } from 'expo-router';
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
+  // Set initialRouteName to '(test)' to make the Test group show first
+  initialRouteName: '(test)',
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -51,8 +52,11 @@ function RootLayoutNav() {
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
+        {/* Ensuring that (test) group is loaded first */}
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="(test)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        {/* Uncomment below line to load (tabs) after (test) */}
       </Stack>
     </ThemeProvider>
   );
