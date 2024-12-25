@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import {
     View,
     Text,
@@ -7,9 +8,26 @@ import {
     TextInput,
     TouchableOpacity,
 } from 'react-native';
+import { Picker } from '@react-native-picker/picker'
 import placeholder from '../assets/placeholder.png';
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import 'react-native-get-random-values';
+import { GOOGLE_API_KEY } from '@env';
 
 const Home = () => {
+    const [selectedPeople, setSelectedPeople] = React.useState('');
+    const [location, setLocation] = useState('');
+
+    const navigation = useNavigation();
+
+    const handleSearch = () => {
+        // Navigate to FindCaterers page and pass location and selectedPeople as props
+        navigation.navigate('FindCaterers', {
+            location: location, // Assuming selectedLocation is the state holding the location
+            numberOfPeople: selectedPeople,
+        });
+    };
+
     return (
         <ScrollView className="flex-1 bg-white">
             {/* Header Section */}
@@ -21,22 +39,76 @@ const Home = () => {
                     Your trusted destination for finding reliable and exceptional catering
                     services tailored to meet every need and occasion.
                 </Text>
-                <View className="w-full flex-row gap-3 mb-3">
-                    <TextInput
-                        className="flex-1 p-2 rounded bg-white"
-                        placeholder="Select Your Location"
-                    />
-                    <TextInput
-                        className="flex-1 p-2 rounded bg-white"
-                        placeholder="Select Number of People"
-                    />
-                    <TouchableOpacity className="bg-white py-2 px-6 rounded self-center">
+                <View className="w-full flex-col gap-3 mb-3">
+                    <View className="w-full flex-row gap-3 mb-3">
+                        <View className="flex-1 rounded bg-white p-0">
+                            <GooglePlacesAutocomplete
+                                placeholder="Search"
+                                fetchDetails={true}
+                                onPress={(data, details = null) => {
+                                    setLocation(data.description); // Update location on selection
+                                }}
+                                query={{
+                                    key: GOOGLE_API_KEY,
+                                    language: 'en',
+                                    components: 'country:in', // Restrict to India
+                                }}
+                                textInputProps={{
+                                    value: location, // Controlled input
+                                    onChangeText: (text) => setLocation(text), // Update location on typing
+                                }}
+                                styles={{
+                                    container: {
+                                        width: '100%', // Ensures the container takes full width
+                                        height: 50, // Adjusted height
+                                    },
+                                    textInput: {
+                                        width: '100%', // The input itself takes up the full width
+                                        backgroundColor: '#FFFFFF',
+                                        borderRadius: 5,
+                                        paddingHorizontal: 10,
+                                        paddingVertical: 10,
+                                        height: 50, // Fixed height for the text input field
+                                    },
+                                    listView: {
+                                        width: '100%', // Make the suggestion dropdown take full width
+                                        position: 'absolute', // Position it absolutely so it stretches out
+                                        left: 0, // Align to the left
+                                        right: 0, // Align to the right
+                                        zIndex: 9999, // Ensure it's above other elements
+                                    },
+                                    predefinedPlacesDescription: {
+                                        color: '#1faadb', // Customize description color
+                                    },
+                                    description: {
+                                        fontSize: 16, // Font size for the suggestions
+                                    },
+                                }}
+                            />
+                        </View>
+                        <View className="flex-1 rounded bg-white p-0">
+                            <Picker
+                                selectedValue={selectedPeople}
+                                onValueChange={(itemValue) => setSelectedPeople(itemValue)}
+                                style={{ height: 55, width: '100%' }} // Set the Picker height to 50 to match the input height
+                            >
+                                <Picker.Item label="Default" value="" />
+                                <Picker.Item label="10-25" value="10-25" />
+                                <Picker.Item label="25-50" value="25-50" />
+                                <Picker.Item label="50-100" value="50-100" />
+                                <Picker.Item label="100+" value="100+" />
+                            </Picker>
+                        </View>
+                    </View>
+                    <TouchableOpacity className="bg-white py-2 px-6 rounded self-center" onPress={handleSearch}>
                         <Text className="text-[#2a47ec] font-bold">SEARCH</Text>
                     </TouchableOpacity>
                 </View>
 
 
-                <View className="flex-row justify-around gap-4 mt-5">
+
+
+                {/* <View className="flex-row justify-around gap-4 mt-5">
                     {['Location', 'Choose a Service', 'Search'].map((title, index) => (
                         <View key={index} className="bg-white rounded-lg p-4 flex-1 shadow-md">
                             <Text className="text-lg font-bold mb-2">{title}</Text>
@@ -50,7 +122,7 @@ const Home = () => {
                             </TouchableOpacity>
                         </View>
                     ))}
-                </View>
+                </View> */}
             </View>
 
             {/* Rest of the sections */}

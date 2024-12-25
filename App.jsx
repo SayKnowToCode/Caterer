@@ -9,6 +9,7 @@ import Landing from './screens/Landing';
 import Home from './screens/Home';
 import Login from './screens/Login';
 import Register from './screens/Register';
+import FindCaterers from './screens/FindCaterers'; // Import FindCaterers
 
 const Stack = createNativeStackNavigator();
 
@@ -37,6 +38,11 @@ const App = () => {
                         name="Register"
                         component={Register}
                         options={{ headerShown: false }}
+                    />
+                    <Stack.Screen
+                        name="FindCaterers"
+                        component={FindCaterers}
+                        options={{ headerShown: true, title: "Find Caterers" }}
                     />
                 </Stack.Navigator>
             </NavigationContainer>
