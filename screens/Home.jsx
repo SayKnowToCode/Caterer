@@ -33,7 +33,7 @@ const Home = () => {
             {/* Header Section */}
             <View className="bg-[#2a47ec] p-5">
                 <Text className="text-2xl font-bold text-white text-center mb-3">
-                    Welcome to CaterSmart!
+                    Welcome to CaterersNearMe!
                 </Text>
                 <Text className="text-white text-center mb-5">
                     Your trusted destination for finding reliable and exceptional catering

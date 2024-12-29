@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, Button, ScrollView, Switch } from 'react-native';
+import { View, Text, Image, Button, ScrollView, Switch, Modal } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { SERVER_URL } from '@env';
 import axios from 'axios';
 import placeholder from '../assets/placeholder.png';
+import CatererDetailsModal from '../components/CatererDetailsModal';
 
 const FindCaterers = ({ route }) => {
     const { location, numberOfPeople } = route.params;
@@ -12,6 +13,7 @@ const FindCaterers = ({ route }) => {
     const [vegMode, setVegMode] = useState(false); // Veg mode filter as switch
     const [selectedCuisine, setSelectedCuisine] = useState('all'); // Filter for Cuisine type
     const [sortOption, setSortOption] = useState('lowToHigh'); // Sorting option
+    const [selectedCaterer, setSelectedCaterer] = useState(null); // Selected caterer for modal
 
     useEffect(() => {
         const fetchCaterers = async () => {
@@ -23,6 +25,7 @@ const FindCaterers = ({ route }) => {
                 console.log(error);
             }
         };
+        setSelectedCaterer(null);
         fetchCaterers();
     }, []);
 
@@ -77,9 +80,12 @@ const FindCaterers = ({ route }) => {
         setFilteredCaterers(sortedData);
     };
 
-    const handleDetailClick = (id) => {
-        // Handle the logic when the Details button is clicked
-        console.log(`Caterer details for ID: ${id}`);
+    const handleDetailClick = (caterer) => {
+        setSelectedCaterer(caterer);
+    };
+
+    const closeModal = () => {
+        setSelectedCaterer(null);
     };
 
     return (
@@ -152,7 +158,7 @@ const FindCaterers = ({ route }) => {
                             <View className="justify-center">
                                 <Button
                                     title="Details"
-                                    onPress={() => handleDetailClick(caterer.id)}
+                                    onPress={() => handleDetailClick(caterer)}
                                 />
                             </View>
                         </View>
@@ -171,6 +177,15 @@ const FindCaterers = ({ route }) => {
                 ))
             ) : (
                 <Text>No caterers found. Try adjusting your search or filters.</Text>
+            )}
+
+            {selectedCaterer && (
+                <CatererDetailsModal
+                    visible={!!selectedCaterer}
+                    caterer={selectedCaterer}
+                    numberOfPeople={numberOfPeople}
+                    onClose={closeModal}
+                />
             )}
         </ScrollView>
     );
