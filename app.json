@@ -1,34 +1,30 @@
 {
   "expo": {
     "name": "Caterers Near Me",
-    "slug": "Caterers Near Me",
+    "slug": "caterers-near-me",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/placeholder.png",
     "scheme": "vsetu",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/placeholder.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.ninad13.caterersnearme"
     },
     "web": {
       "bundler": "metro",
       "output": "static",
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/placeholder.png"
     },
     "plugins": [
       "expo-font",
@@ -37,6 +33,14 @@
     "experiments": {
       "typedRoutes": true,
       "tsconfigPaths": true
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "05ae5eea-539b-4a81-9652-3205977c435b"
+      }
     }
   }
 }

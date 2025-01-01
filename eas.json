@@ -1,0 +1,25 @@
+{
+  "cli": {
+    "version": ">= 14.2.0",
+    "appVersionSource": "remote"
+  },
+  "build": {
+    "development": {
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "distribution": "internal",
+      "env": {
+        "GOOGLE_API_KEY": "AIzaSyAUD63maRlEe3fqMDi4ZTrspkP_vVVgcGo",
+        "SERVER_URL": "https://www.caterersnearme.in"
+      }
+    },
+    "production": {
+      "autoIncrement": true
+    }
+  },
+  "submit": {
+    "production": {}
+  }
+}
