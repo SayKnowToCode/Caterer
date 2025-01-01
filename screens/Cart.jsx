@@ -2,14 +2,18 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, ScrollView, Alert } from 'react-native';
 import axios from 'axios';
 import { SERVER_URL } from '@env';
+import { useNavigation } from '@react-navigation/native';
 
 const Cart = ({ route }) => {
-    const { dish } = route.params;
+    const navigation = useNavigation();
+    const { dish, numberOfPeople } = route.params;
     const [categories, setCategories] = useState([]);
     const [menuItems, setMenuItems] = useState([]);
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedItems, setSelectedItems] = useState({});
     const [categoryQuantities, setCategoryQuantities] = useState({});
+
+    // console.log(dish, numberOfPeople);
 
     useEffect(() => {
         async function fetchItemData() {
@@ -110,6 +114,14 @@ const Cart = ({ route }) => {
         return (selectedItems[category] || []).length;
     };
 
+    const handlePlaceOrder = () => {
+        navigation.navigate('Order', {
+            dish: dish,
+            numberOfPeople: numberOfPeople,
+            selectedItems: selectedItems
+        })
+    }
+
     return (
         <View className="flex-1">
             <View className="flex-1 flex-row">
@@ -176,7 +188,15 @@ const Cart = ({ route }) => {
 
             {/* Order Preview Section */}
             <View className="bg-white p-4 border-t border-gray-200">
-                <Text className="text-xl font-bold mb-4">Order Preview</Text>
+                <View className="flex-row justify-evenly">
+                    <Text className="text-xl font-bold mb-4 flex-1">Order Preview</Text>
+                    <TouchableOpacity
+                        onPress={() => handlePlaceOrder()}
+                        className="bg-green-500 p-3 rounded-full items-center justify-center"
+                    >
+                        <Text className="text-white font-bold">Place Order</Text>
+                    </TouchableOpacity>
+                </View>
                 <ScrollView className="max-h-40">
                     {categories.map((category, index) => (
                         <View key={index} className="mb-4">

@@ -1,6 +1,8 @@
 // screens/LoginScreen.js
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity } from 'react-native';
+import { SERVER_URL } from '@env';
+import axios from 'axios';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const LoginScreen = ({ navigation }) => {
@@ -9,12 +11,15 @@ const LoginScreen = ({ navigation }) => {
 
     const handleLogin = async () => {
         try {
-            await AsyncStorage.setItem('isLoggedIn', 'true');
-            console.log('Data saved');
+            const response = await axios.post(`${SERVER_URL}/api/auth/email/login`, {
+                email,
+                password,
+            });
+            await AsyncStorage.setItem('user', JSON.stringify(response.data.user));
+            navigation.navigate('Home');
         } catch (e) {
-            console.error('Error saving data', e);
+            console.error('An error occurred', e);
         }
-        navigation.navigate('MainDrawer');
     };
 
     return (
@@ -34,7 +39,7 @@ const LoginScreen = ({ navigation }) => {
                 onChangeText={setPassword}
             />
             <TouchableOpacity
-                className="w-full bg-primary text-dark rounded-xl px-4 py-4 mb-4"
+                className="w-full bg-blue-600 text-dark rounded-xl px-4 py-4 mb-4"
                 onPress={handleLogin}
             >
                 <Text className="text-white text-center font-bold text-lg">Login</Text>

@@ -13,12 +13,27 @@ import placeholder from '../assets/placeholder.png';
 import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
 import 'react-native-get-random-values';
 import { GOOGLE_API_KEY } from '@env';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Home = () => {
     const [selectedPeople, setSelectedPeople] = React.useState('');
     const [location, setLocation] = useState('');
 
     const navigation = useNavigation();
+
+    const getUserData = async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('user');
+            const parsedValue = JSON.parse(jsonValue);
+            console.log("User data from AsyncStorage:", parsedValue);
+        } catch (e) {
+            console.error("Error fetching user data from AsyncStorage", e);
+        }
+    };
+
+    useEffect(() => {
+        getUserData();
+    }, []);
 
     const handleSearch = () => {
         // Navigate to FindCaterers page and pass location and selectedPeople as props
@@ -32,6 +47,12 @@ const Home = () => {
         <ScrollView className="flex-1 bg-white">
             {/* Header Section */}
             <View className="bg-[#2a47ec] p-5">
+                <TouchableOpacity
+                    className="bg-white py-2 px-6 rounded self-center mb-3"
+                    onPress={() => navigation.navigate('Bookings')}
+                >
+                    <Text className="text-[#2a47ec] font-bold">My Bookings</Text>
+                </TouchableOpacity>
                 <Text className="text-2xl font-bold text-white text-center mb-3">
                     Welcome to CaterersNearMe!
                 </Text>

@@ -12,7 +12,7 @@ const CatererDetailsModal = ({ visible, caterer, onClose, numberOfPeople }) => {
 
     const onCardClick = (dish) => {
         onClose();
-        navigation.navigate('Cart', { dish: dish });
+        navigation.navigate('Cart', { dish: dish, numberOfPeople: numberOfPeople });
     };
 
     const getDishes = () => {
