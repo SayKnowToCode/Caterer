@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "Caterers Near Me",
-    "slug": "caterers-near-me",
+    "slug": "caterersnearme",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/placeholder.png",
@@ -39,8 +39,9 @@
         "origin": false
       },
       "eas": {
-        "projectId": "05ae5eea-539b-4a81-9652-3205977c435b"
+        "projectId": "64b0087d-e37c-449f-9560-dae1798339ea"
       }
-    }
+    },
+    "owner": "overlord-1"
   }
 }
