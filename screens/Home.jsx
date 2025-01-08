@@ -47,12 +47,26 @@ const Home = () => {
         <ScrollView className="flex-1 bg-white">
             {/* Header Section */}
             <View className="bg-[#2a47ec] p-5">
-                <TouchableOpacity
-                    className="bg-white py-2 px-6 rounded self-center mb-3"
-                    onPress={() => navigation.navigate('Bookings')}
-                >
-                    <Text className="text-[#2a47ec] font-bold">My Bookings</Text>
-                </TouchableOpacity>
+                <View className="flex-row justify-between items-center">
+                    <TouchableOpacity
+                        className="bg-white py-2 px-6 rounded self-center mb-3"
+                        onPress={() => navigation.navigate('Bookings')}
+                    >
+                        <Text className="text-[#2a47ec] font-bold">My Bookings</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        className="bg-white py-2 px-6 rounded self-center mb-3"
+                        onPress={() => navigation.navigate('Profile')}
+                    >
+                        <Text className="text-[#2a47ec] font-bold">Profile</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        className="bg-white py-2 px-6 rounded self-center mb-3"
+                        onPress={() => navigation.navigate('ContactUs')}
+                    >
+                        <Text className="text-[#2a47ec] font-bold">Contact Us</Text>
+                    </TouchableOpacity>
+                </View>
                 <Text className="text-2xl font-bold text-white text-center mb-3">
                     Welcome to CaterersNearMe!
                 </Text>

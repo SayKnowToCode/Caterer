@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 const Order = ({ route }) => {
     const { dish, numberOfPeople, selectedItems } = route.params;
     const navigation = useNavigation();
+    // console.log(dish, numberOfPeople, selectedItems);
 
     const [eventDate, setEventDate] = useState(new Date());
     const [eventTime, setEventTime] = useState(new Date());
@@ -157,6 +158,39 @@ const Order = ({ route }) => {
 
             {/* Submit Button */}
             <Button title="Submit" onPress={handleSubmit} />
+
+
+            {/* Bill Summary */}
+            <View className="mt-5 p-4 border border-gray-300 rounded-lg bg-gray-100">
+                <Text className="text-lg font-bold mb-3">Bill Summary:</Text>
+
+                <View className="flex-row justify-between mb-1">
+                    <Text>Dish Price:</Text>
+                    <Text className="font-bold">₹ {dish.price || 0}</Text>
+                </View>
+
+                <View className="flex-row justify-between mb-1">
+                    <Text>Add On Item Price:</Text>
+                    <Text className="font-bold">₹ 0</Text>
+                </View>
+
+                <View className="flex-row justify-between mb-1">
+                    <Text>Final Per Dish Price:</Text>
+                    <Text className="font-bold">₹ {dish.price || 0}</Text>
+                </View>
+
+                <View className="flex-row justify-between mb-1">
+                    <Text>Final Price:</Text>
+                    <Text className="font-bold">₹ {dish.price * (Number(quantity) || 1)}</Text>
+                </View>
+
+                <View className="flex-row justify-between">
+                    <Text>Total:</Text>
+                    <Text className="font-bold">₹ {(dish.price * (Number(quantity) || 1)).toFixed(2)}</Text>
+                </View>
+            </View>
+
+
         </View>
     );
 };

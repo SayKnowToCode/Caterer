@@ -173,6 +173,28 @@ const FindCaterers = ({ route }) => {
                                 </Text>
                             </View>
                         )}
+
+                        {caterer.rating !== undefined && (
+                            <View className="mt-2">
+                                <Text className="text-sm">
+                                    <Text className="font-bold">Rating: </Text>
+                                    <Text className="italic">
+                                        {caterer.rating} ⭐
+                                    </Text>
+                                </Text>
+                            </View>
+                        )}
+
+                        {caterer.rating === undefined && (
+                            <View className="mt-2">
+                                <Text className="text-sm">
+                                    <Text className="font-bold">Rating: </Text>
+                                    <Text className="italic">
+                                        4.5 ⭐
+                                    </Text>
+                                </Text>
+                            </View>
+                        )}
                     </View>
                 ))
             ) : (

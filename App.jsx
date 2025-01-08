@@ -13,6 +13,8 @@ import FindCaterers from './screens/FindCaterers';
 import Cart from './screens/Cart';
 import Bookings from './screens/Bookings';
 import Order from './screens/Order';
+import Profile from './screens/Profile';
+import ContactUs from './screens/ContactUs';
 
 const Stack = createNativeStackNavigator();
 
@@ -56,6 +58,16 @@ const App = () => {
                         name="Bookings"
                         component={Bookings}
                         options={{ headerShown: true, title: "My Bookings" }}
+                    />
+                    <Stack.Screen
+                        name="Profile"
+                        component={Profile}
+                        options={{ headerShown: true, title: "My Profile" }}
+                    />
+                    <Stack.Screen
+                        name="ContactUs"
+                        component={ContactUs}
+                        options={{ headerShown: true, title: "Contact Us" }}
                     />
                     <Stack.Screen
                         name="Order"
