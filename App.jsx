@@ -23,13 +23,13 @@ const App = () => {
         <SafeAreaView style={styles.container}>
             <StatusBar barStyle="dark-content" backgroundColor="#ffffff" />
             <NavigationContainer>
-                <Stack.Navigator initialRouteName="Landing">
+                <Stack.Navigator initialRouteName="Home">
                     <Stack.Screen
-                        name="Landing"
-                        component={Landing}
+                        name="Home"
+                        component={Home}
                         options={{ headerShown: false }}
                     />
-                    <Stack.Screen
+                    {/* <Stack.Screen
                         name="Home"
                         component={Home}
                         options={{ headerShown: false }}
@@ -73,7 +73,7 @@ const App = () => {
                         name="Order"
                         component={Order}
                         options={{ headerShown: true }}
-                    />
+                    /> */}
                 </Stack.Navigator>
             </NavigationContainer>
         </SafeAreaView>
