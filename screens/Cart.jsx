@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, FlatList, TouchableOpacity, ScrollView, Alert } from 'react-native';
+import { View, Text, FlatList, TouchableOpacity, ScrollView, Alert, TextInput, Image } from 'react-native';
 import axios from 'axios';
 import { SERVER_URL } from '@env';
 import { useNavigation } from '@react-navigation/native';
+import placeholder from '../assets/placeholder.png';
+import { Search, Mic } from 'lucide-react-native';
 
 const Cart = ({ route }) => {
     const navigation = useNavigation();
@@ -12,8 +14,11 @@ const Cart = ({ route }) => {
     const [selectedCategory, setSelectedCategory] = useState(null);
     const [selectedItems, setSelectedItems] = useState({});
     const [categoryQuantities, setCategoryQuantities] = useState({});
+    const [searchQuery, setSearchQuery] = useState('');
 
-    // console.log(dish, numberOfPeople);
+    const filteredMenuItems = menuItems.filter(item =>
+        item.toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
     useEffect(() => {
         async function fetchItemData() {
@@ -124,6 +129,18 @@ const Cart = ({ route }) => {
 
     return (
         <View className="flex-1">
+            <View className="flex-row items-center bg-[#EBEBF7] rounded-full p-3 px-4">
+                <TextInput
+                    className="flex-1 text-black text-lg font-semibold"
+                    placeholder="Search for dishes"
+                    placeholderTextColor="#000"
+                    value={searchQuery}
+                    onChangeText={setSearchQuery}
+                />
+                <Search size={22} color="black" className="mr-3" />
+                <View className="w-[1px] h-6 bg-gray-400 mx-2" />
+                <Mic size={22} color="blue" />
+            </View>
             <View className="flex-1 flex-row">
                 {/* Sidebar */}
                 <View className="w-1/3 bg-gray-100 p-4">
@@ -133,7 +150,7 @@ const Cart = ({ route }) => {
                         renderItem={({ item }) => (
                             <View className="mb-4">
                                 <TouchableOpacity
-                                    className={`p-3 rounded ${item === selectedCategory ? 'bg-purple-600' : 'bg-gray-300'}`}
+                                    className={`p-3 rounded ${item === selectedCategory ? 'bg-blue-600' : 'bg-gray-300'}`}
                                     onPress={() => handleCategoryClick(item)}
                                 >
                                     <Text className={`text-center font-bold ${item === selectedCategory ? 'text-white' : 'text-black'}`}>
@@ -167,16 +184,22 @@ const Cart = ({ route }) => {
 
                 {/* Menu Display */}
                 <View className="w-2/3 p-4">
-                    {menuItems.length > 0 ? (
+                    {filteredMenuItems.length > 0 ? (
                         <FlatList
-                            data={menuItems}
+                            data={filteredMenuItems}
                             keyExtractor={(item, index) => index.toString()}
                             renderItem={({ item }) => (
                                 <TouchableOpacity
                                     onPress={() => handleItemSelect(item)}
-                                    className={`p-4 my-2 rounded ${isItemSelected(item) ? 'bg-purple-200 border-2 border-purple-600' : 'bg-gray-200'}`}
+                                    className={`p-4 my-2 rounded ${isItemSelected(item) ? 'bg-blue-200 border-2 border-blue-600' : 'bg-gray-200'}`}
                                 >
-                                    <Text className="text-lg font-semibold text-gray-800">{item}</Text>
+                                    <View className="flex-row items-center">
+                                        <Image
+                                            source={placeholder} // Replace with actual image URL
+                                            className="w-12 h-12 rounded-full mr-4"
+                                        />
+                                        <Text className="text-lg font-semibold text-gray-800">{item}</Text>
+                                    </View>
                                 </TouchableOpacity>
                             )}
                         />

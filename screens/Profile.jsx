@@ -1,4 +1,4 @@
-import { View, Text, TextInput, Button } from 'react-native'
+import { View, Text, TextInput, Button, SafeAreaView } from 'react-native'
 import React, { useState, useEffect } from 'react'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
@@ -40,7 +40,7 @@ const Profile = () => {
     }
 
     return (
-        <View>
+        <SafeAreaView>
             <Text>First Name: {user.firstName}</Text>
             <Text>Last Name: {user.lastName}</Text>
             <TextInput
@@ -54,7 +54,7 @@ const Profile = () => {
                 placeholder="Email"
             />
             <Button title="Update Profile" onPress={updateProfile} />
-        </View>
+        </SafeAreaView>
     )
 }
 
