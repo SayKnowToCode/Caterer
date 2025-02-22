@@ -40,20 +40,8 @@ const Profile = () => {
     }
 
     return (
-        <View>
-            <Text>First Name: {user.firstName}</Text>
-            <Text>Last Name: {user.lastName}</Text>
-            <TextInput
-                value={user.phone}
-                onChangeText={(text) => setUser({ ...user, phone: text })}
-                placeholder="Phone Number"
-            />
-            <TextInput
-                value={user.email}
-                onChangeText={(text) => setUser({ ...user, email: text })}
-                placeholder="Email"
-            />
-            <Button title="Update Profile" onPress={updateProfile} />
+        <View className="flex-1 justify-center items-center">
+            <Text className="text-xl font-bold">Profile Screen</Text>
         </View>
     )
 }
