@@ -11,12 +11,12 @@ const TopSection = () => {
         "Ghatkopar, Mumbai",
         "Bandra, Mumbai",
     ];
-    
+
     const [isVegMode, setIsVegMode] = useState(false);
     const [showLocationModal, setShowLocationModal] = useState(false);
     const [selectedLocation, setSelectedLocation] = useState(locations[0]);
 
-    
+
 
     return (
         <SafeAreaView style={{ backgroundColor: '#0F1CC1' }} className="flex-1">
@@ -146,111 +146,40 @@ const TopSection = () => {
                 </View>
 
                 {/* Offer Section */}
-                <View className="flex-row px-4 mt-6 space-x-4">
-                    <TouchableOpacity className="flex-1 bg-white p-4 rounded-2xl shadow">
-                        <View className="w-12 h-12 bg-blue-50 rounded-full items-center justify-center mb-3">
-                            <MaterialIcons name="restaurant-menu" size={24} color="#0B137E" />
+                {/* Enhanced Offer Section */}
+                <View className="flex-row px-4 mt-6 space-x-4 pb-6 rounded-b-3xl">
+                    <TouchableOpacity
+                        className="flex-1 bg-white p-5 rounded-2xl shadow-lg"
+                        style={{
+                            elevation: 4,
+                            shadowColor: '#0B137E',
+                            shadowOffset: { width: 0, height: 4 },
+                            shadowOpacity: 0.1,
+                            shadowRadius: 8,
+                        }}
+                    >
+                        <View className="flex-row items-center space-x-3 mb-4">
+                            <View className="w-14 h-14 bg-blue-50 rounded-full items-center justify-center">
+                                <MaterialIcons name="restaurant-menu" size={28} color="#0B137E" />
+                            </View>
+                            <View className="bg-blue-50 px-3 py-1 rounded-full">
+                                <Text className="text-blue-900 font-semibold">Limited Time</Text>
+                            </View>
                         </View>
-                        <Text className="text-gray-900 font-medium leading-5">
-                            Get free tasting from 3 Caterers of your choice
+                        <Text className="text-2xl font-bold text-gray-900 mb-2">
+                            Free Tasting
                         </Text>
-                    </TouchableOpacity>
-                    <View className="w-32 bg-white rounded-2xl shadow overflow-hidden">
-                        <Image
-                            source={{ uri: 'https://via.placeholder.com/150' }}
-                            className="w-full h-full"
-                            resizeMode="cover"
-                        />
-                    </View>
-                </View>
-
-                {/* Quick Actions */}
-                <View className="flex-row justify-between px-4 mt-6">
-                    {['Wedding', 'Corporate', 'Birthday', 'Party'].map((item, index) => (
-                        <TouchableOpacity key={index} className="items-center">
-                            <View className="bg-blue-50 w-16 h-16 rounded-full items-center justify-center mb-2">
-                                <MaterialIcons name="celebration" size={28} color="#1e40af" />
-                            </View>
-                            <Text className="text-gray-700 text-sm">{item}</Text>
-                        </TouchableOpacity>
-                    ))}
-                </View>
-
-                {/* Special Offer Card */}
-                <TouchableOpacity className="mx-4 mt-6">
-                    <LinearGradient
-                        colors={['#f97316', '#ea580c']}
-                        className="p-4 rounded-2xl">
-                        <View className="flex-row justify-between items-center">
-                            <View className="flex-1">
-                                <Text className="text-white text-xl font-bold mb-2">Free Tasting! 🎉</Text>
-                                <Text className="text-white/90 text-sm mb-3">Try before you book - Sample menu from top 3 caterers</Text>
-                                <TouchableOpacity className="bg-white w-32 py-2 rounded-lg">
-                                    <Text className="text-orange-600 font-bold text-center">Book Now</Text>
-                                </TouchableOpacity>
-                            </View>
-                            <Image
-                                source={{ uri: 'https://via.placeholder.com/100' }}
-                                className="w-24 h-24 rounded-xl"
-                            />
+                        <Text className="text-gray-600 text-base leading-5 mb-3">
+                            Sample premium menus from 3 top-rated caterers of your choice
+                        </Text>
+                        <View className="flex-row items-center">
+                            <Text className="text-blue-900 font-semibold mr-2">Learn More</Text>
+                            <MaterialIcons name="arrow-forward-ios" size={14} color="#0B137E" />
                         </View>
-                    </LinearGradient>
-                </TouchableOpacity>
-
-                {/* Popular Caterers */}
-                <View className="mt-6 px-4">
-                    <View className="flex-row justify-between items-center mb-4">
-                        <Text className="text-xl font-bold text-gray-800">Popular Caterers</Text>
-                        <TouchableOpacity>
-                            <Text className="text-blue-600">See all</Text>
-                        </TouchableOpacity>
-                    </View>
-
-                    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                        {[...Array(3)].map((_, index) => (
-                            <TouchableOpacity key={index} className="mr-4 bg-white rounded-2xl shadow p-3 w-64">
-                                <Image
-                                    source={{ uri: 'https://via.placeholder.com/200' }}
-                                    className="w-full h-32 rounded-xl mb-3"
-                                />
-                                <View className="flex-row justify-between items-start">
-                                    <View>
-                                        <Text className="text-lg font-bold text-gray-800">Royal Caterers</Text>
-                                        <Text className="text-gray-500">Indian • Continental</Text>
-                                        <View className="flex-row items-center mt-1">
-                                            <FontAwesome name="star" size={16} color="#fbbf24" />
-                                            <Text className="ml-1 text-gray-700">4.8 (2.4k reviews)</Text>
-                                        </View>
-                                    </View>
-                                    <View className="bg-blue-50 px-2 py-1 rounded">
-                                        <Text className="text-blue-700 font-bold">₹999/plate</Text>
-                                    </View>
-                                </View>
-                            </TouchableOpacity>
-                        ))}
-                    </ScrollView>
+                    </TouchableOpacity>
                 </View>
 
-                {/* Recent Orders */}
-                <View className="mt-6 px-4 mb-6">
-                    <Text className="text-xl font-bold text-gray-800 mb-4">Recent Orders</Text>
-                    {[...Array(2)].map((_, index) => (
-                        <TouchableOpacity key={index} className="flex-row items-center bg-white p-3 rounded-xl shadow mb-3">
-                            <Image
-                                source={{ uri: 'https://via.placeholder.com/60' }}
-                                className="w-16 h-16 rounded-lg"
-                            />
-                            <View className="flex-1 ml-3">
-                                <Text className="font-bold text-gray-800">Wedding Reception</Text>
-                                <Text className="text-gray-500">250 guests • Veg & Non-veg</Text>
-                                <Text className="text-blue-600">Track Order →</Text>
-                            </View>
-                            <View className="bg-blue-50 px-3 py-1 rounded">
-                                <Text className="text-blue-700">Active</Text>
-                            </View>
-                        </TouchableOpacity>
-                    ))}
-                </View>
+                
             </ScrollView>
         </SafeAreaView>
     )
