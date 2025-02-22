@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Text, Image, FlatList, TouchableOpacity, Pressable, ScrollView, Modal, Animated } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -6,36 +6,69 @@ import { MaterialIcons } from '@expo/vector-icons';
 const MainSection = () => {
     const [activeFilter, setActiveFilter] = useState('all');
     const [showSliders, setShowSliders] = useState(false);
-    const [isVeg, setIsVeg] = useState(false);
-    const [isNonVeg, setIsNonVeg] = useState(false);
-    const [vegSlideAnim] = useState(new Animated.Value(0));
-    const [nonVegSlideAnim] = useState(new Animated.Value(0));
+    const [dietaryType, setDietaryType] = useState(null); // null, 'veg', or 'nonveg'
+    const vegSlideAnim = useRef(new Animated.Value(0)).current;
+    const nonVegSlideAnim = useRef(new Animated.Value(0)).current;
+    const vegScaleAnim = useRef(new Animated.Value(1)).current;
+    const nonVegScaleAnim = useRef(new Animated.Value(1)).current;
+
+    const animateToggle = (isVeg) => {
+        const currentAnim = isVeg ? vegSlideAnim : nonVegSlideAnim;
+        const otherAnim = isVeg ? nonVegSlideAnim : vegSlideAnim;
+        const currentScale = isVeg ? vegScaleAnim : nonVegScaleAnim;
+        const otherScale = isVeg ? nonVegScaleAnim : vegScaleAnim;
+        
+        // Reset the other toggle
+        Animated.parallel([
+            Animated.spring(otherAnim, {
+                toValue: 0,
+                useNativeDriver: true,
+                tension: 50,
+                friction: 8,
+            }),
+            Animated.spring(otherScale, {
+                toValue: 1,
+                useNativeDriver: true,
+            })
+        ]).start();
+
+        // Animate the selected toggle
+        Animated.parallel([
+            Animated.spring(currentAnim, {
+                toValue: dietaryType === (isVeg ? 'veg' : 'nonveg') ? 0 : 1,
+                useNativeDriver: true,
+                tension: 50,
+                friction: 8,
+            }),
+            Animated.sequence([
+                Animated.timing(currentScale, {
+                    toValue: 0.8,
+                    duration: 100,
+                    useNativeDriver: true,
+                }),
+                Animated.spring(currentScale, {
+                    toValue: 1,
+                    tension: 50,
+                    useNativeDriver: true,
+                })
+            ])
+        ]).start();
+    };
 
     const toggleVeg = () => {
-        setIsVeg(!isVeg);
-        Animated.spring(vegSlideAnim, {
-            toValue: isVeg ? 0 : 1,
-            useNativeDriver: true,
-        }).start();
+        const newValue = dietaryType === 'veg' ? null : 'veg';
+        setDietaryType(newValue);
+        animateToggle(true);
     };
 
     const toggleNonVeg = () => {
-        setIsNonVeg(!isNonVeg);
-        Animated.spring(nonVegSlideAnim, {
-            toValue: isNonVeg ? 0 : 1,
-            useNativeDriver: true,
-        }).start();
+        const newValue = dietaryType === 'nonveg' ? null : 'nonveg';
+        setDietaryType(newValue);
+        animateToggle(false);
     };
 
     const sliderOptions = {
-        preferences: {
-            title: 'Dietary Preferences',
-            options: [
-                { label: 'Pure Veg', icon: '🟢' },
-                { label: 'Non-Veg', icon: '🔺' },
-                { label: 'Both', icon: '⚫' }
-            ]
-        },
+        // s
         price: {
             title: 'Price Range',
             options: ['$0-$50', '$51-$100', '$101-$200', '$200+']
@@ -133,21 +166,25 @@ const MainSection = () => {
         { id: 'all', label: 'All', icon: '⚫' },
         { 
             id: 'veg', 
-            label: 'Veg', 
-            icon: '🟢',
-            isToggled: isVeg,
+            label: '', 
+            icon: <MaterialIcons name="crop-square" size={28} color={dietaryType === 'veg' ? '#fff' : '#22C55E'} />,
+            isToggled: dietaryType === 'veg',
             onToggle: toggleVeg,
             slideAnim: vegSlideAnim,
-            activeColor: '#22C55E'
+            scaleAnim: vegScaleAnim,
+            activeColor: '#22C55E',
+            width: 72
         },
         { 
             id: 'nonveg', 
-            label: 'Non-Veg', 
-            icon: '🔺',
-            isToggled: isNonVeg,
+            label: '', 
+            icon: <MaterialIcons name="change-history" size={28} color={dietaryType === 'nonveg' ? '#fff' : '#EF4444'} />,
+            isToggled: dietaryType === 'nonveg',
             onToggle: toggleNonVeg,
             slideAnim: nonVegSlideAnim,
-            activeColor: '#EF4444'
+            scaleAnim: nonVegScaleAnim,
+            activeColor: '#EF4444',
+            width: 72
         },
         { 
             id: 'sliders', 
@@ -256,46 +293,56 @@ const MainSection = () => {
                                 }
                             }}
                             className={`
-                                flex-row items-center px-4 py-2 rounded-full
+                                flex-row items-center justify-center px-4 py-2 rounded-full
                                 ${filter.id === 'sliders' ? 'bg-blue-700' : ''}
                                 ${filter.id !== 'sliders' && !filter.onToggle && activeFilter === filter.id ? 'bg-blue-700' : 'bg-gray-100'}
                                 ${filter.onToggle ? 'relative overflow-hidden' : ''}
                             `}
                             style={filter.onToggle ? {
                                 backgroundColor: filter.isToggled ? filter.activeColor : '#f3f4f6',
-                                minWidth: 100
+                                width: filter.width,
+                                height: 40, // Increased height
+                                paddingHorizontal: 16, // Increased padding
+                                marginHorizontal: 4
                             } : null}
                         >
-                            <View className="flex-row items-center">
-                                {filter.id !== 'all' && (
-                                    <Text className="mr-2">{filter.icon}</Text>
-                                )}
-                                <Text className={`
-                                    ${filter.id === 'sliders' || (activeFilter === filter.id && !filter.onToggle) ? 'text-white' : 'text-gray-700'}
-                                    ${filter.isToggled ? 'text-white' : ''}
-                                    font-medium
-                                `}>
-                                    {filter.label}
-                                </Text>
-                                {filter.onToggle && (
+                            {filter.onToggle ? (
+                                <View className="flex-row items-center w-full relative">
                                     <Animated.View
                                         style={{
-                                            transform: [{
-                                                translateX: filter.slideAnim.interpolate({
-                                                    inputRange: [0, 1],
-                                                    outputRange: [0, 40]
-                                                })
-                                            }],
+                                            transform: [
+                                                {
+                                                    translateX: filter.slideAnim.interpolate({
+                                                        inputRange: [0, 1],
+                                                        outputRange: [4, 30]
+                                                    })
+                                                },
+                                                {
+                                                    scale: filter.scaleAnim
+                                                }
+                                            ],
                                             position: 'absolute',
-                                            right: 8,
-                                            width: 20,
-                                            height: 20,
-                                            backgroundColor: 'white',
-                                            borderRadius: 10,
+                                            left: -5,
                                         }}
-                                    />
-                                )}
-                            </View>
+                                    >
+                                        {filter.icon}
+                                    </Animated.View>
+                                </View>
+                            ) : (
+                                <>
+                                    <View className="relative">
+                                        {filter.icon}
+                                    </View>
+                                    {filter.label && (
+                                        <Text className={`
+                                            ${filter.id === 'sliders' || (activeFilter === filter.id && !filter.onToggle) ? 'text-white' : 'text-gray-700'}
+                                            font-medium ml-2
+                                        `}>
+                                            {filter.label}
+                                        </Text>
+                                    )}
+                                </>
+                            )}
                         </TouchableOpacity>
                     ))}
                 </View>
