@@ -1,16 +1,35 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { View, Text, Image, TextInput, TouchableOpacity, ScrollView, SafeAreaView, StatusBar, Modal } from 'react-native';
 import { FontAwesome, Ionicons, MaterialIcons, Feather } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
 
-const TopSection = () => {
+import { useNavigation } from '@react-navigation/native';
+import { Picker } from '@react-native-picker/picker'
+import placeholder from '../assets/placeholder.png';
+import { GooglePlacesAutocomplete } from "react-native-google-places-autocomplete";
+import 'react-native-get-random-values';
+import { GOOGLE_API_KEY } from '@env';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
+const TopSection = () => {
+    const [selectedPeople, setSelectedPeople] = React.useState('');
+    const [location, setLocation] = useState('');
+
+    const navigation = useNavigation();
     const locations = [
         "Andheri East, Mumbai",
         "Churchgate, Mumbai",
         "Ghatkopar, Mumbai",
         "Bandra, Mumbai",
     ];
+
+    const handleSearch = () => {
+        // Navigate to FindCaterers page and pass location and selectedPeople as props
+        navigation.navigate('FindCaterers', {
+            location: location, // Assuming selectedLocation is the state holding the location
+            numberOfPeople: selectedPeople,
+        });
+    };
 
     const [isVegMode, setIsVegMode] = useState(false);
     const [showLocationModal, setShowLocationModal] = useState(false);
@@ -47,6 +66,72 @@ const TopSection = () => {
                             <Text className={`font-medium ${isVegMode ? 'text-white' : 'text-blue-900'}`}>
                                 Veg Mode
                             </Text>
+                        </TouchableOpacity>
+                    </View>
+
+                    <View className="w-full flex-col gap-3 mb-3">
+                        <View className="w-full flex-row gap-3 mb-3">
+                            <View className="flex-1 rounded bg-white p-0">
+                                <GooglePlacesAutocomplete
+                                    placeholder="Search"
+                                    fetchDetails={true}
+                                    onPress={(data, details = null) => {
+                                        setLocation(data.description); // Update location on selection
+                                    }}
+                                    query={{
+                                        key: GOOGLE_API_KEY,
+                                        language: 'en',
+                                        components: 'country:in', // Restrict to India
+                                    }}
+                                    textInputProps={{
+                                        value: location, // Controlled input
+                                        onChangeText: (text) => setLocation(text), // Update location on typing
+                                    }}
+                                    styles={{
+                                        container: {
+                                            width: '100%', // Ensures the container takes full width
+                                            height: 50, // Adjusted height
+                                        },
+                                        textInput: {
+                                            width: '100%', // The input itself takes up the full width
+                                            backgroundColor: '#FFFFFF',
+                                            borderRadius: 5,
+                                            paddingHorizontal: 10,
+                                            paddingVertical: 10,
+                                            height: 50, // Fixed height for the text input field
+                                        },
+                                        listView: {
+                                            width: '100%', // Make the suggestion dropdown take full width
+                                            position: 'absolute', // Position it absolutely so it stretches out
+                                            left: 0, // Align to the left
+                                            right: 0, // Align to the right
+                                            zIndex: 9999, // Ensure it's above other elements
+                                        },
+                                        predefinedPlacesDescription: {
+                                            color: '#1faadb', // Customize description color
+                                        },
+                                        description: {
+                                            fontSize: 16, // Font size for the suggestions
+                                        },
+                                    }}
+                                />
+                            </View>
+                            <View className="flex-1 rounded bg-white p-0">
+                                <Picker
+                                    selectedValue={selectedPeople}
+                                    onValueChange={(itemValue) => setSelectedPeople(itemValue)}
+                                    style={{ height: 55, width: '100%' }} // Set the Picker height to 50 to match the input height
+                                >
+                                    <Picker.Item label="Default" value="" />
+                                    <Picker.Item label="10-25" value="10-25" />
+                                    <Picker.Item label="25-50" value="25-50" />
+                                    <Picker.Item label="50-100" value="50-100" />
+                                    <Picker.Item label="100+" value="100+" />
+                                </Picker>
+                            </View>
+                        </View>
+                        <TouchableOpacity className="bg-white py-2 px-6 rounded self-center" onPress={handleSearch}>
+                            <Text className="text-[#2a47ec] font-bold">SEARCH</Text>
                         </TouchableOpacity>
                     </View>
 
@@ -179,7 +264,7 @@ const TopSection = () => {
                     </TouchableOpacity>
                 </View>
 
-                
+
             </ScrollView>
         </SafeAreaView>
     )

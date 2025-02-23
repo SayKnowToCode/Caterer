@@ -2,6 +2,7 @@ import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
 import Home from '../screens/Home';
+import HomeOld from '../screens/HomeOld';
 import Messages from '../screens/Messages';
 import Profile from '../screens/Profile';
 import Order from '../screens/Order';
